@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>채팅</h1>
+
+    <div class="row">
+        <!-- 📌 채팅 목록 (왼쪽) -->
+        <div class="col-md-4">
+            <hr>
+            <h4>채팅 목록</h4>
+            <ul class="list-group1">
+                {% if chat_rooms %}
+                    {% for chat in chat_rooms %}
+                    <li class="list-group-item1 {% if chat.chat_id == chat_id %}active{% endif %}">
+                        <div class="d-flex flex-column">
+                            <!-- 📌 게시글 제목 -->
+                            <strong>
+                                {% if chat.post_id and chat.post_id > 0 %}
+                                    <span class="text-danger">📌</span> 
+                                    {% if chat.category == 'walks' %}
+                                        <a href="{{ url_for('walk_detail', post_id=chat.post_id) }}" class="text-primary">
+                                            {{ chat.post_title }}
+                                        </a>
+                                    {% elif chat.category == 'community_posts' %}
+                                        <a href="{{ url_for('community_detail', post_id=chat.post_id) }}" class="text-primary">
+                                            {{ chat.post_title }}
+                                        </a>
+                                    {% elif chat.category == 'petsitters' %}
+                                        <a href="{{ url_for('petsitter_detail', post_id=chat.post_id) }}" class="text-primary">
+                                            {{ chat.post_title }}
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">(관련 게시글 없음)</span>
+                                {% endif %}
+                            </strong>
+                            <!-- 📌 채팅 상대방 -->
+                            <!-- <a href="{{ url_for('chat_room', chat_id=chat.chat_id) }}" class="text-dark">
+                                💬 {{ chat.chat_partner }}
+                            </a>
+                        </div> -->
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item text-muted">진행 중인 채팅이 없습니다.</li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- 📌 채팅 화면 (오른쪽) -->
+        <div class="col-md-8">
+            <!-- 📌 관련 게시글 정보 (채팅창 상단) -->
+            {% if post_info and post_info.post_id > 0 %}
+            <div class="text-end mb-3">
+                <span class="text-danger">📌 관련 게시글: </span>
+                <a href="
+                    {% if post_info.category == 'walks' %}
+                        {{ url_for('walk_detail', post_id=post_info.post_id) }}
+                    {% elif post_info.category == 'community_posts' %}
+                        {{ url_for('community_detail', post_id=post_info.post_id) }}
+                    {% elif post_info.category == 'petsitters' %}
+                        {{ url_for('petsitter_detail', post_id=post_info.post_id) }}
+                    {% endif %}
+                " class="text-primary fw-bold">
+                    {{ post_info.post_title }}
+                </a>
+            </div>
+            {% endif %}
+
+            {% if chat_id %}
+            <!-- 📌 채팅 메시지 출력 (초록색 스타일 유지) -->
+            <div class="chat-box p-3 border rounded bg-light">
+                {% for msg in messages %}
+                <div class="chat-message {% if msg.sender_id == user_id %}my-message{% else %}their-message{% endif %}">
+                    <p class="mb-1">{{ msg.message }}</p>
+                    <div class="chat-meta text-muted small">
+                        {{ msg.sender_name }} | {{ msg.created_at }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- 📌 메시지 입력창 -->
+            <form method="POST" action="{{ url_for('send_message', chat_id=chat_id) }}" class="d-flex mt-3">
+                <input type="text" name="message" class="custom-input" placeholder="메시지를 입력하세요..." required>
+                <button type="submit" class="custom-btn">전송</button>
+            </form>
+            {% else %}
+            <p class="text-muted">채팅방을 선택해주세요.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

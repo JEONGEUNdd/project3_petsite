@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>게시글 수정</h1>
+    <hr>
+    <div class="card p-4">
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('petsitter_edit', post_id=post.id) }}">
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" name="title" id="title" class="form-control" value="{{ post.title }}" required>
+            </div>
+            <div class="form-group">
+                <label for="description">설명</label>
+                <textarea name="description" id="description" class="form-control" rows="3" required>{{ post.description }}</textarea>
+            </div>
+
+            <!-- ✅ 기존 이미지 미리보기 -->
+            {% if post.image_path %}
+            <div class="form-group">
+                <label>현재 이미지</label><br>
+                <img src="{{ url_for('static', filename='uploads/' + post.image_path) }}" alt="게시글 이미지" class="img-fluid">
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="image">이미지 변경 (선택)</label>
+                <input type="file" name="image" id="image" class="form-control-file">
+            </div>
+
+            <button type="submit" class="btn btn-success">수정 완료</button>
+            <a href="{{ url_for('petsitters') }}" class="btn btn-secondary">취소</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

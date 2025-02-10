@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4 edit-community-container">
+    <h1 class="text-center">소통방 글 수정</h1>
+    <div class="card p-4">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" name="title" id="title" class="form-control" value="{{ post.title }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea id="realeditor" name="content" style="display:none;">{{ post.content }}</textarea>
+                <div id="editor"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="image">이미지 업로드 (선택)</label>
+                <input type="file" name="image" id="image" class="form-control-file">
+                {% if post.image_path %}
+                <img src="{{ url_for('static', filename='uploads/' + post.image_path) }}" class="img-thumbnail mt-2" width="200">
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="submit-btn">수정 완료</button>
+        </form>
+    </div>
+</div>
+
+<!-- Quill 에디터 -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    // Quill 에디터 초기화
+    var quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                ['link', 'image', 'video'],
+                ['clean']
+            ]
+        }
+    });
+
+    // 기존 내용 로드
+    {% if post %}
+        quill.root.innerHTML = `{{ post.content|safe }}`;
+    {% endif %}
+
+    // 폼 제출 시 Quill 데이터를 textarea에 복사
+    document.getElementById('submit-btn').addEventListener('click', function() {
+        document.getElementById('realeditor').value = quill.root.innerHTML;
+    });
+</script>
+
+{% endblock %}

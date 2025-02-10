@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4 add-walks-container">
+    <h1 class="text-center">산책 요청 글 작성</h1>
+    <div class="card p-4">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" name="title" id="title" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">설명</label>
+                <textarea id="realeditor" name="description" style="display:none;"></textarea>
+                <div id="editor"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="province">도 선택</label>
+                <input type="text" name="province" class="form-control" value="{{ session.get('province', '') }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="city">시 선택</label>
+                <input type="text" name="city" class="form-control" value="{{ session.get('city', '') }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="district">동 선택</label>
+                <input type="text" name="district" class="form-control" value="{{ session.get('district', '') }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="image">이미지 업로드 (선택)</label>
+                <input type="file" name="image" id="image" class="form-control-file">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="submit-btn">게시글 등록</button>
+        </form>
+    </div>
+</div>
+
+<!-- Quill CSS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<!-- Quill JS -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script>
+    var quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                ['link', 'image', 'video'],
+                ['clean']
+            ]
+        }
+    });
+
+    document.getElementById('submit-btn').addEventListener('click', function() {
+        document.getElementById('realeditor').value = quill.root.innerHTML;
+    });
+</script>
+
+{% endblock %}

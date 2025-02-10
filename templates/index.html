@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="main-container">
+  <div id="dogCarousel" class="carousel slide" data-ride="carousel" data-interval="2000">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="row justify-content-center">
+          <div class="col-md-4">
+            <img src="/static/images/realdog.png" class="carousel-img" alt="강아지1">
+          </div>
+          <div class="col-md-4">
+            <img src="/static/images/realdog2.jpg" class="carousel-img" alt="강아지2">
+          </div>
+          <div class="col-md-4">
+            <img src="/static/images/realdog7.jpg" class="carousel-img" alt="강아지3">
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="row justify-content-center">
+          <div class="col-md-4">
+            <img src="/static/images/realdog4.jpg" class="carousel-img" alt="강아지4">
+          </div>
+          <div class="col-md-4">
+            <img src="/static/images/realdog5.jpg" class="carousel-img" alt="강아지5">
+          </div>
+          <div class="col-md-4">
+            <img src="/static/images/realdog6.jpg" class="carousel-img" alt="강아지6">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a class="carousel-control-prev" href="#dogCarousel" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </a>
+    <a class="carousel-control-next" href="#dogCarousel" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </a>
+  </div>
+  <h1 class="main-title"><br>반려동물을 위한 올인원 서비스, 펫밋!</h1>
+  <p class="main-subtitle">산책 매칭, 돌봄 서비스, 반려동물 커뮤니티를 한곳에서!</p>
+
+  <!-- ✅ 기능 소개 (넓게 배치) -->
+  <div class="features">
+    <div class="feature-item">
+      <img src="{{ url_for('static', filename='images/walkingdog.png') }}" alt="산책 아이콘">
+      <h3>산책 매칭</h3>
+      <p>산책이 필요한 반려동물과 보호자를 연결해요!</p>
+    </div>
+    <div class="feature-item">
+      <img src="{{ url_for('static', filename='images/care.png') }}" alt="돌봄 아이콘">
+      <h3>돌봄 서비스</h3>
+      <p>반려동물 돌봄을 맡기고, 도와줄 수도 있어요.</p>
+    </div>
+    <div class="feature-item">
+      <img src="{{ url_for('static', filename='images/message.png') }}" alt="소통방 아이콘">
+      <h3>커뮤니티</h3>
+      <p>반려동물과 함께하는 일상을 공유하고 소통해요.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ 사용자 후기 (카드 크기 확장) -->
+<div class="testimonials-wrapper">
+  <div class="testimonials">
+    <h2>🐶 사용자 후기 🐶</h2>
+    <div class="testimonial-container">
+      <div class="testimonial-card">
+        <img src="{{ url_for('static', filename='images/realdog.png') }}" class="testimonial-img">
+        <p>"펫밋 덕분에 우리 강아지 산책을 더 자주 시킬 수 있어요!"</p>
+        <span>- 사용자A</span>
+      </div>
+      <div class="testimonial-card">
+        <img src="{{ url_for('static', filename='images/realdog.png') }}" class="testimonial-img">
+        <p>"반려동물 돌봄 서비스가 너무 편해요! 🥰"</p>
+        <span>- 사용자B</span>
+      </div>
+      <div class="testimonial-card">
+        <img src="{{ url_for('static', filename='images/realdog.png') }}" class="testimonial-img">
+        <p>"반려동물 커뮤니티에서 유익한 정보도 얻고 있어요!"</p>
+        <span>- 사용자C</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ✅ 펫밋 차별점 (너비 조정) -->
+<div class="why-petmeet">
+  <h2>왜 펫밋을 선택해야 할까요?</h2>
+  <ul class="checklist">
+    <li>✔️반려동물을 위한 다양한 서비스 제공</li>
+    <li>✔️쉽고 빠른 산책 & 돌봄 매칭</li>
+    <li>✔️ 우리 동네에서 가까운 보호자 & 돌봄 매칭 가능</li>
+    <li>✔️ 실시간 채팅 & 정보 공유로 더 편리한 소통</li>
+    <li>✔️ 반려동물 보호자를 위한 따뜻한 커뮤니티</li>
+    <li>✔️ 전국 어디서나 간편하게 이용 가능한 플랫폼</li>
+  </ul>
+</div>
+</div>
+{% endblock %}

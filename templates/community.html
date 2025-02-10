@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>소통방</h1>
+        <a href="{{ url_for('add_community', show_form=True) }}" class="btn btn-outline-primary btn-sm1">글 작성</a>
+        <!-- <form action="{{ url_for('community') }}" method="GET">
+            <input type="hidden" name="show_form" value="true">
+            <button type="submit" class="btn btn-outline-primary btn-sm">글 작성</button>
+        </form> -->
+    </div>
+    <hr>
+
+    {% if show_form %}
+    <!-- ✅ 글 작성 폼 -->
+    <div class="card p-4">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" name="title" id="title" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea name="content" id="content" class="form-control" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">이미지 업로드 (선택)</label>
+                <input type="file" name="image" id="image" class="form-control-file">
+            </div>
+            <button type="submit" class="btn btn-primary">게시글 등록</button>
+        </form>
+    </div>
+    <hr>
+    {% endif %}
+
+    {% if post %}
+    <!-- ✅ 게시글 상세보기 -->
+    <div class="mt-2 post-detail-container full-width">
+        <h3>{{ post.title }}</h3>
+        {% if post.image_path %}
+        <img src="{{ url_for('static', filename='uploads/' + post.image_path) }}" alt="게시글 이미지" class="img-fluid">
+        {% endif %}
+        <p>{{ post.content|safe }}</p>
+        <small>작성일: {{ post.created_at|time_ago }}</small>
+
+        <!-- ✅ 좋아요 버튼 -->
+        <button class="btn btn-light like-btn" data-post-id="{{ post.id }}" data-category="community_posts">
+            {% if post.like_count | default(0) > 0 %}❤️{% else %}🤍{% endif %}
+            <span class="like-count">{{ post.like_count | default(0) }}</span>
+        </button>
+       <!-- ✅ 채팅하기 버튼 (글 작성자가 아닐 때만 표시) -->
+       {% if user_id and user_id != post.author_id %}
+       <button class="btn btn-primary chat-btn" 
+            data-post-id="{{ post.id }}" 
+            data-author-id="{{ post.author_id | default(0) }}"
+            data-category="community_posts">
+            🗨️ 채팅하기
+        </button>
+       {% endif %}
+       
+       <!-- ✅ 수정 & 삭제 버튼 -->
+       {% if user_id and user_id == post.author_id %}
+       <a href="{{ url_for('edit_community', post_id=post.id) }}" class="btn btn-warning mt-2">
+           ✏️ 수정
+       </a>
+       <button class="btn btn-danger delete-btn mt-2" data-post-id="{{ post.id }}" data-category="walks">
+           🗑️ 삭제
+       </button>
+       {% endif %}
+
+       <!-- ✅ 삭제 버튼 (게시글 작성자만 볼 수 있음) -->
+       <!-- {% if user_id and user_id == post.author_id %}
+       <button class="btn btn-danger delete-btn mt-2" data-post-id="{{ post.id }}" data-category="community_posts">
+           🗑️ 삭제
+       </button>
+       {% endif %} -->
+
+        <!-- ✅ 댓글 목록 -->
+        <h4 class="mt-4">댓글</h4>
+        <ul class="list-group4">
+            {% for comment in comments %}
+            <li class="list-group-item4">
+                <p>{{ comment.content |safe }}</p>
+                <small>{{ comment.nickname }} | {{ comment.created_at|time_ago }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- ✅ 댓글 작성 -->
+        {% if user_id %}
+        <form method="POST">
+            <textarea name="content" class="form-control" rows="3" placeholder="댓글을 입력하세요" required></textarea>
+            <button type="submit" class="btn btn-primary mt-2">댓글 작성</button>
+        </form>
+        {% else %}
+        <p><a href="/login">로그인</a> 후 댓글을 작성할 수 있습니다.</p>
+        {% endif %}
+    </div>
+    {% else %}
+
+    <div class="popular-posts-card p-3 mb-4">
+        <h4>🔥 실시간 인기 게시글</h4>
+        <ul class="popular-posts-list">
+            {% for post in top_posts %}
+            <li class="popular-post-item d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{{ url_for('community_detail', post_id=post.id) }}" class="text-decoration-none">
+                        {{ post.title }}
+                    </a>
+                    <small class="text-muted">💬 {{ post.comment_count }} ❤️ {{ post.like_count }}</small>
+                </div>
+            </li>
+            {% else %}
+            <li class="popular-post-item text-center text-muted">최근 3일 동안 인기 게시글이 없습니다.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+    <!-- ✅ 게시글 목록 -->
+    <ul class="list-group" id="postList">
+        {% for post in posts %}
+        <li class="list-group-item d-flex align-items-center">
+            <!-- ✅ 이미지 컨테이너 -->
+            {% if post.image_path %}
+            <div class="image-container">
+                <img src="{{ url_for('static', filename='uploads/' + post.image_path) }}" 
+                     alt="이미지" class="img-thumbnail">
+            </div>
+            {% endif %}
+            <div class="post-content">
+                <h5>
+                    <a href="{{ url_for('community_detail', post_id=post.id) }}" class="text-decoration-none">
+                        {{ post.title }}
+                    </a>
+                </h5>
+                <p>{{ post.content | striptags | truncate(30, True, '...') }}</p>
+                <small>{{ post.created_at|time_ago }}</small>
+            </div>
+            <div class="post-actions">
+                <button class="btn btn-light like-btn" data-post-id="{{ post.id }}" data-category="community_posts">
+                    {% if post.like_count | default(0) > 0 %}❤️{% else %}🤍{% endif %}
+                    <span class="like-count">{{ post.like_count | default(0) }}</span>
+                </button>
+                <!-- 💬 {{ post.comment_count | default(0) }} -->
+                <span class="chat-icon">💬</span>
+                <span class="chat-count">{{ post.comment_count | default(0) }}</span>
+                 <!-- ✅ 삭제 버튼 (게시글 작성자만 볼 수 있음) -->
+                 {% if user_id and user_id == post.author_id %}
+                 <button class="btn btn-danger delete-btn" data-post-id="{{ post.id }}" data-category="community_posts">
+                     🗑️ 삭제
+                 </button>
+                 {% endif %}
+            </div>
+        </li>
+        {% else %}
+        <li class="list-group-item text-center text-muted">아직 게시글이 없습니다.</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}
