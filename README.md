@@ -4,14 +4,14 @@
 PetMeet은 사용자가 위치 기반으로 반려동물 산책 및 돌봄 서비스를 요청하거나 제공할 수 있도록 지원하는 웹 플랫폼입니다.  
 전국 커뮤니티 기능을 통해 반려동물 관련 정보 공유 및 소통을 활성화하는 것을 목표로 합니다.  
 
-📌 프로젝트 정보
-프로젝트 기간: 2025.01 ~ 2025.02
-참여 인원: 1인 (개인 프로젝트)
-사용 기술:
-Backend: Python (Flask)
-Frontend: HTML, CSS, JavaScript
-Database: MySQL
-Version Control: GitHub
+📌 프로젝트 정보  
+프로젝트 기간: 2025.01 ~ 2025.02  
+참여 인원: 1인 (개인 프로젝트)  
+사용 기술:  
+Backend: Python (Flask)  
+Frontend: HTML, CSS, JavaScript  
+Database: MySQL  
+Version Control: GitHub  
 
 🚀 주요 기능  
 1️⃣ 위치 기반 반려동물 산책 & 돌봄 매칭  
