@@ -31,10 +31,10 @@ Version Control: GitHub
 원하는 지역의 반려동물 서비스 검색 가능  
 
 # 기술적 구현
-Flask + MySQL 연동: 회원가입, 로그인, 게시글 CRUD, 채팅 기능 구현   
-Jinja2 템플릿 활용: HTML에서 동적 데이터 표시  
-Ajax & jQuery: 비동기 방식으로 데이터 처리 (채팅, 게시글 반응 속도 향상)  
-VirtualBox를 활용한 가상 환경 설정: 가상 머신(Ubuntu)에서 데이터베이스 서버 구축
+- Flask + MySQL 연동: 회원가입, 로그인, 게시글 CRUD, 채팅 기능 구현   
+- Jinja2 템플릿 활용: HTML에서 동적 데이터 표시  
+- Ajax & jQuery: 비동기 방식으로 데이터 처리 (채팅, 게시글 반응 속도 향상)  
+- VirtualBox를 활용한 가상 환경 설정: 가상 머신(Ubuntu)에서 데이터베이스 서버 구축
 
 # 데이터 분석 적용 가능성 
 - 사용자 행동 분석: 서비스 이용 패턴을 분석하여 UX 개선  
